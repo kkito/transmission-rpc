@@ -2,8 +2,15 @@ import { Transmission } from './src/transmission'
 async function main() {
   const t = new Transmission({ host: '192.168.123.36' });
   // const token = await t.getToken();
-  const token = await t.getTorrents();
+  // const token = await t.getTorrents();
   // tslint:disable-next-line:no-console
-  console.log(token);
+  // console.log(token);
+
+  // const result = await t.getTorrentInfo("1");
+  // const result = await t.getTorrents()
+  const result = await t.startTorrent('./KOCfYI7G.torrent');
+  // const result = await t.removeTorrent(6);
+  // tslint:disable-next-line:no-console
+  console.log(result);
 }
 main();

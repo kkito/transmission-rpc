@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as fs from 'fs';
 
 export interface ITransmissionOptions {
   host?: string,
@@ -7,6 +8,9 @@ export interface ITransmissionOptions {
 }
 
 export class Transmission {
+  public static readonly SessionHeader = 'X-Transmission-Session-Id';
+  private sessionToken: string | null = null;
+
   private options: ITransmissionOptions = {
     host: 'localhost',
     path: '/transmission/rpc',
@@ -28,27 +32,35 @@ export class Transmission {
   }
 
   public async getToken(): Promise<string> {
+    if (this.sessionToken) {
+      return this.sessionToken;
+    }
     try {
       const response = await axios.get(this.requestURL());
-      return response.headers['X-Transmission-Session-Id'];
+      return response.headers[Transmission.SessionHeader];
     } catch (err) {
       // tslint:disable-next-line:no-console
       console.log(err.response.headers);
-      return err.response.headers['x-transmission-session-id']
+      this.sessionToken = err.response.headers[Transmission.SessionHeader.toLowerCase()];
+      if (this.sessionToken) {
+        return this.sessionToken;
+      } else {
+        throw new Error(`get session token fail`);
+      }
     }
   }
 
-  public async getTorrents(): Promise<string> {
+  public async rpcCall(method: string, args: any):Promise<object> {
     const data = {
-      "arguments": { "fields": ["id"] },
-      "method": "torrent-get",
-    };
+      "arguments": args,
+      "method": method,
+    }
     try {
-
+      const token = await this.getToken();
+      const headers: any = {};
+      headers[Transmission.SessionHeader] = token;
       const response = await axios.post(this.requestURL(), data, {
-        headers: {
-          'X-Transmission-Session-Id': "7616s7TK2AvL4qe17CCRXMihGhsjsSTQumcQrjhs1d9YkFwX"
-        }
+        headers
       });
       // tslint:disable-next-line:no-console
       console.log(JSON.stringify(response.data));
@@ -56,9 +68,50 @@ export class Transmission {
     } catch (e) {
       // tslint:disable-next-line:no-console
       console.log(e.response);
-      return "error";
+      return {status: "error"};
     }
   }
+
+  public async getTorrents(): Promise<object> {
+    return this.rpcCall('torrent-get', {
+      fields: ['id', 'name', 'percentDone', 'dateCreated']
+    })
+  }
+
+  public async getTorrentInfo(torrentId: number): Promise<any> {
+    return this.rpcCall('torrent-get', {
+      fields: ['id', 'name', 'percentDone', 'dateCreated'],
+      ids: [torrentId],
+    })
+  }
+
+  // 返回值 { arguments: { 'torrent-added': { hashString: '56889108e64f2ff82882bb4b6aec3fe47f2b34fd', id: 6, name: '524' } }, result: 'success' }
+  public async startTorrent(torrentFile: string): Promise<object> {
+    return this.startTorrentByBuffer(fs.readFileSync(torrentFile));
+  }
+
+  public async startTorrentByBuffer(torrent:Buffer): Promise<object> {
+    const response = await this.rpcCall('torrent-add', {
+      metainfo: torrent.toString('base64')
+    })
+    // tslint:disable-next-line:no-console
+    console.log(JSON.stringify(response));
+    // tslint:disable-next-line:no-empty
+    return response;
+  }
+
+  public async removeTorrent(torrentId: number, deleteLocalData = false): Promise<object> {
+    return this.rpcCall('torrent-remove', {
+      "delete-local-data": deleteLocalData,
+      ids: [torrentId],
+    })
+  }
+
+  /*
+  public async removeTorrent(torrentId:string) {
+
+  }
+  */
 
   // curl -v 'http://192.168.123.36:9091/transmission/rpc'
   // curl -v -H "X-Transmission-Session-Id: 7616s7TK2AvL4qe17CCRXMihGhsjsSTQumcQrjhs1d9YkFwX" -d '{"method":"session-get"}' 'http://192.168.123.36:9091/transmission/rpc'
