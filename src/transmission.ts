@@ -2,23 +2,23 @@ import axios from 'axios';
 import * as fs from 'fs';
 
 export interface ITransmissionOptions {
-  host?: string,
-  port?: number,
-  path?: string
+  host?: string;
+  port?: number;
+  path?: string;
 }
 
-  // 返回值 { arguments: { 'torrent-added': { hashString: '56889108e64f2ff82882bb4b6aec3fe47f2b34fd', id: 6, name: '524' } }, result: 'success' }
+// 返回值 { arguments: { 'torrent-added': { hashString: '56889108e64f2ff82882bb4b6aec3fe47f2b34fd', id: 6, name: '524' } }, result: 'success' }
 export interface IRpcResponse {
-  arguments: any,
-  result: string,
+  arguments: any;
+  result: string;
 }
 
 export interface ITorrentStatus {
-  id?: number,
-  name?: string,
-  percentDone?: number,
-  dateCreated?: number,
-  downloadDir?: string,
+  id?: number;
+  name?: string;
+  percentDone?: number;
+  dateCreated?: number;
+  downloadDir?: string;
 }
 
 export class Transmission {
@@ -29,7 +29,7 @@ export class Transmission {
     host: 'localhost',
     path: '/transmission/rpc',
     port: 9091,
-  }
+  };
 
   constructor(options?: ITransmissionOptions) {
     if (options) {
@@ -55,7 +55,8 @@ export class Transmission {
     } catch (err) {
       // tslint:disable-next-line:no-console
       console.log(err.response.headers);
-      this.sessionToken = err.response.headers[Transmission.SessionHeader.toLowerCase()];
+      this.sessionToken =
+        err.response.headers[Transmission.SessionHeader.toLowerCase()];
       if (this.sessionToken) {
         return this.sessionToken;
       } else {
@@ -64,16 +65,16 @@ export class Transmission {
     }
   }
 
-  public async rpcCall<T = any>(method: string, args: any):Promise<T> {
+  public async rpcCall<T = any>(method: string, args: any): Promise<T> {
     const data = {
-      "arguments": args,
-      "method": method,
-    }
+      arguments: args,
+      method: method,
+    };
     const token = await this.getToken();
     const headers: any = {};
     headers[Transmission.SessionHeader] = token;
     const response = await axios.post<T>(this.requestURL(), data, {
-      headers
+      headers,
     });
     // tslint:disable-next-line:no-console
     console.log(JSON.stringify(response.data));
@@ -81,58 +82,69 @@ export class Transmission {
   }
 
   public async getTorrents(): Promise<ITorrentStatus[]> {
-    const result = await this.rpcCall<{ arguments: { torrents: ITorrentStatus[] } }>('torrent-get', {
-      fields: ['id', 'name', 'percentDone', 'dateCreated' , 'downloadDir']
-    })
+    const result = await this.rpcCall<{
+      arguments: { torrents: ITorrentStatus[] };
+    }>('torrent-get', {
+      fields: ['id', 'name', 'percentDone', 'dateCreated', 'downloadDir'],
+    });
     return result.arguments.torrents;
   }
 
   public async getTorrentInfo(torrentId: number): Promise<any> {
     return this.rpcCall('torrent-get', {
-      fields: ['id', 'name', 'percentDone', 'dateCreated' , 'downloadDir'],
+      fields: ['id', 'name', 'percentDone', 'dateCreated', 'downloadDir'],
       ids: [torrentId],
-    })
+    });
   }
 
   // 返回值 { arguments: { 'torrent-added': { hashString: '56889108e64f2ff82882bb4b6aec3fe47f2b34fd', id: 6, name: '524' } }, result: 'success' }
-  public async startTorrent(torrentFile: string , downloadDir?:string): Promise<number> {
-    return this.startTorrentByBuffer(fs.readFileSync(torrentFile) , downloadDir);
+  public async startTorrent(
+    torrentFile: string,
+    downloadDir?: string
+  ): Promise<number> {
+    return this.startTorrentByBuffer(fs.readFileSync(torrentFile), downloadDir);
   }
 
-  public async startTorrentByBuffer(torrent:Buffer , downloadDir?:string): Promise<number> {
-    const metainfo= torrent.toString('base64')
+  public async startTorrentByBuffer(
+    torrent: Buffer,
+    downloadDir?: string
+  ): Promise<number> {
+    const metainfo = torrent.toString('base64');
     let args;
-    if(downloadDir) {
+    if (downloadDir) {
       args = {
-        "download-dir": downloadDir,
+        'download-dir': downloadDir,
         metainfo,
-      }
-    }else{
+      };
+    } else {
       args = {
         metainfo,
-      }
+      };
     }
     const response = await this.rpcCall<{
       arguments: {
         'torrent-added': {
           hashString: string;
-          id:number;
-        }
-      }
-    }>('torrent-add', args)
+          id: number;
+        };
+      };
+    }>('torrent-add', args);
     // tslint:disable-next-line:no-string-literal
-    return response.arguments["torrent-added"].id;
+    return response.arguments['torrent-added'].id;
     // // tslint:disable-next-line:no-console
     // console.log(JSON.stringify(response));
     // // tslint:disable-next-line:no-empty
     // return response;
   }
 
-  public async removeTorrent(torrentId: number, deleteLocalData = false): Promise<object> {
+  public async removeTorrent(
+    torrentId: number,
+    deleteLocalData = false
+  ): Promise<object> {
     return this.rpcCall('torrent-remove', {
-      "delete-local-data": deleteLocalData,
+      'delete-local-data': deleteLocalData,
       ids: [torrentId],
-    })
+    });
   }
 
   /*
@@ -151,6 +163,8 @@ export class Transmission {
   }
 
   private requestURL(): string {
-    return `http://${this.options.host}:${this.options.port}${this.options.path}`;
+    return `http://${this.options.host}:${this.options.port}${
+      this.options.path
+    }`;
   }
 }

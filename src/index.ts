@@ -1,1 +1,1 @@
-export { Transmission } from './transmission';
+export { Transmission, ITorrentStatus } from './transmission';
