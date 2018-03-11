@@ -1,1 +1,1 @@
-export * from './transmission';
+export { Transmission } from './transmission';
