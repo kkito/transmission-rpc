@@ -94,11 +94,23 @@ export class Transmission {
   }
 
   // 返回值 { arguments: { 'torrent-added': { hashString: '56889108e64f2ff82882bb4b6aec3fe47f2b34fd', id: 6, name: '524' } }, result: 'success' }
-  public async startTorrent(torrentFile: string): Promise<number> {
-    return this.startTorrentByBuffer(fs.readFileSync(torrentFile));
+  public async startTorrent(torrentFile: string , downloadDir?:string): Promise<number> {
+    return this.startTorrentByBuffer(fs.readFileSync(torrentFile) , downloadDir);
   }
 
-  public async startTorrentByBuffer(torrent:Buffer): Promise<number> {
+  public async startTorrentByBuffer(torrent:Buffer , downloadDir?:string): Promise<number> {
+    const metainfo= torrent.toString('base64')
+    let args;
+    if(downloadDir) {
+      args = {
+        "download-dir": downloadDir,
+        metainfo,
+      }
+    }else{
+      args = {
+        metainfo,
+      }
+    }
     const response = await this.rpcCall<{
       arguments: {
         'torrent-added': {
@@ -106,9 +118,7 @@ export class Transmission {
           id:number;
         }
       }
-    }>('torrent-add', {
-      metainfo: torrent.toString('base64')
-    })
+    }>('torrent-add', args)
     // tslint:disable-next-line:no-string-literal
     return response.arguments["torrent-added"].id;
     // // tslint:disable-next-line:no-console

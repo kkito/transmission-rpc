@@ -8,8 +8,8 @@ async function main() {
 
   // const result = await t.getTorrentInfo("1");
   // const result = await t.getTorrents()
-  // const result = await t.startTorrent('./KOCfYI7G.torrent');
-  // const result = await t.removeTorrent(10);
+  // const result = await t.startTorrent('./jYAlukcm.torrent' , '/mnt/sda1/aisg/');
+  // const result = await t.removeTorrent(12);
   // tslint:disable-next-line:no-console
   console.log(result);
 }
