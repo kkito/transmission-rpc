@@ -18,6 +18,7 @@ export interface ITorrentStatus {
   name?: string,
   percentDone?: number,
   dateCreated?: number,
+  downloadDir?: string,
 }
 
 export class Transmission {
@@ -81,14 +82,14 @@ export class Transmission {
 
   public async getTorrents(): Promise<ITorrentStatus[]> {
     const result = await this.rpcCall<{ arguments: { torrents: ITorrentStatus[] } }>('torrent-get', {
-      fields: ['id', 'name', 'percentDone', 'dateCreated']
+      fields: ['id', 'name', 'percentDone', 'dateCreated' , 'downloadDir']
     })
     return result.arguments.torrents;
   }
 
   public async getTorrentInfo(torrentId: number): Promise<any> {
     return this.rpcCall('torrent-get', {
-      fields: ['id', 'name', 'percentDone', 'dateCreated'],
+      fields: ['id', 'name', 'percentDone', 'dateCreated' , 'downloadDir'],
       ids: [torrentId],
     })
   }
