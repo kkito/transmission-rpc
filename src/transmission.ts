@@ -7,6 +7,19 @@ export interface ITransmissionOptions {
   path?: string
 }
 
+  // 返回值 { arguments: { 'torrent-added': { hashString: '56889108e64f2ff82882bb4b6aec3fe47f2b34fd', id: 6, name: '524' } }, result: 'success' }
+export interface IRpcResponse {
+  arguments: any,
+  result: string,
+}
+
+export interface ITorrentStatus {
+  id?: number,
+  name?: string,
+  percentDone?: number,
+  dateCreated?: number,
+}
+
 export class Transmission {
   public static readonly SessionHeader = 'X-Transmission-Session-Id';
   private sessionToken: string | null = null;
@@ -50,32 +63,27 @@ export class Transmission {
     }
   }
 
-  public async rpcCall(method: string, args: any):Promise<object> {
+  public async rpcCall<T = any>(method: string, args: any):Promise<T> {
     const data = {
       "arguments": args,
       "method": method,
     }
-    try {
-      const token = await this.getToken();
-      const headers: any = {};
-      headers[Transmission.SessionHeader] = token;
-      const response = await axios.post(this.requestURL(), data, {
-        headers
-      });
-      // tslint:disable-next-line:no-console
-      console.log(JSON.stringify(response.data));
-      return response.data;
-    } catch (e) {
-      // tslint:disable-next-line:no-console
-      console.log(e.response);
-      return {status: "error"};
-    }
+    const token = await this.getToken();
+    const headers: any = {};
+    headers[Transmission.SessionHeader] = token;
+    const response = await axios.post<T>(this.requestURL(), data, {
+      headers
+    });
+    // tslint:disable-next-line:no-console
+    console.log(JSON.stringify(response.data));
+    return response.data;
   }
 
-  public async getTorrents(): Promise<object> {
-    return this.rpcCall('torrent-get', {
+  public async getTorrents(): Promise<ITorrentStatus[]> {
+    const result = await this.rpcCall<{ arguments: { torrents: ITorrentStatus[] } }>('torrent-get', {
       fields: ['id', 'name', 'percentDone', 'dateCreated']
     })
+    return result.arguments.torrents;
   }
 
   public async getTorrentInfo(torrentId: number): Promise<any> {
@@ -86,18 +94,27 @@ export class Transmission {
   }
 
   // 返回值 { arguments: { 'torrent-added': { hashString: '56889108e64f2ff82882bb4b6aec3fe47f2b34fd', id: 6, name: '524' } }, result: 'success' }
-  public async startTorrent(torrentFile: string): Promise<object> {
+  public async startTorrent(torrentFile: string): Promise<number> {
     return this.startTorrentByBuffer(fs.readFileSync(torrentFile));
   }
 
-  public async startTorrentByBuffer(torrent:Buffer): Promise<object> {
-    const response = await this.rpcCall('torrent-add', {
+  public async startTorrentByBuffer(torrent:Buffer): Promise<number> {
+    const response = await this.rpcCall<{
+      arguments: {
+        'torrent-added': {
+          hashString: string;
+          id:number;
+        }
+      }
+    }>('torrent-add', {
       metainfo: torrent.toString('base64')
     })
-    // tslint:disable-next-line:no-console
-    console.log(JSON.stringify(response));
-    // tslint:disable-next-line:no-empty
-    return response;
+    // tslint:disable-next-line:no-string-literal
+    return response.arguments["torrent-added"].id;
+    // // tslint:disable-next-line:no-console
+    // console.log(JSON.stringify(response));
+    // // tslint:disable-next-line:no-empty
+    // return response;
   }
 
   public async removeTorrent(torrentId: number, deleteLocalData = false): Promise<object> {
