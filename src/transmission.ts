@@ -86,14 +86,28 @@ export class Transmission {
     const result = await this.rpcCall<{
       arguments: { torrents: ITorrentStatus[] };
     }>('torrent-get', {
-      fields: ['id', 'name', 'percentDone', 'dateCreated', 'downloadDir' , 'addedDate'],
+      fields: [
+        'id',
+        'name',
+        'percentDone',
+        'dateCreated',
+        'downloadDir',
+        'addedDate',
+      ],
     });
     return result.arguments.torrents;
   }
 
   public async getTorrentInfo(torrentId: number): Promise<any> {
     return this.rpcCall('torrent-get', {
-      fields: ['id', 'name', 'percentDone', 'dateCreated', 'downloadDir' , 'addedDate'],
+      fields: [
+        'id',
+        'name',
+        'percentDone',
+        'dateCreated',
+        'downloadDir',
+        'addedDate',
+      ],
       ids: [torrentId],
     });
   }
