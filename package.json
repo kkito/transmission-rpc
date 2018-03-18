@@ -1,5 +1,5 @@
 {
-  "name": "transmission-rpc",
+  "name": "@kkito/transmission-rpc",
   "version": "0.0.8",
   "description": "transmission-rpc",
   "license": "MIT",
