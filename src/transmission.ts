@@ -151,8 +151,11 @@ export class Transmission {
       return response.arguments['torrent-added'].id;
     } else {
       // tslint:disable-next-line:no-console
+      console.log(`error happened!`);
+      // tslint:disable-next-line:no-console
       console.log(response);
-      throw new Error(`error happened for ${response}`);
+      // throw new Error(`error happened for ${response}`);
+      return -1;
     }
     // // tslint:disable-next-line:no-console
     // console.log(JSON.stringify(response));
@@ -188,6 +191,6 @@ export class Transmission {
   private requestURL(): string {
     return `http://${this.options.host}:${this.options.port}${
       this.options.path
-      }`;
+    }`;
   }
 }
