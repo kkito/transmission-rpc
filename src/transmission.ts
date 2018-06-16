@@ -137,6 +137,7 @@ export class Transmission {
       };
     }
     const response = await this.rpcCall<{
+      result: string;
       arguments: {
         'torrent-added': {
           hashString: string;
@@ -145,7 +146,14 @@ export class Transmission {
       };
     }>('torrent-add', args);
     // tslint:disable-next-line:no-string-literal
-    return response.arguments['torrent-added'].id;
+    if (response.result && response.result === 'success') {
+      // tslint:disable-next-line:no-string-literal
+      return response.arguments['torrent-added'].id;
+    } else {
+      // tslint:disable-next-line:no-console
+      console.log(response);
+      throw new Error(`error happened for ${response}`);
+    }
     // // tslint:disable-next-line:no-console
     // console.log(JSON.stringify(response));
     // // tslint:disable-next-line:no-empty
@@ -180,6 +188,6 @@ export class Transmission {
   private requestURL(): string {
     return `http://${this.options.host}:${this.options.port}${
       this.options.path
-    }`;
+      }`;
   }
 }
