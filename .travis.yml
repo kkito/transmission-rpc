@@ -4,6 +4,7 @@ node_js:
 install:
 - yarn
 script:
+- npm run beforebuild
 - npm run build
 - npm run test
 after_script:
