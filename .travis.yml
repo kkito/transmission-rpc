@@ -1,9 +1,18 @@
 language: node_js
 node_js:
-  - 'node' # use latest stable nodejs version
+- node
 install:
-  - yarn
+- yarn
 script:
-  - npm run coverage # jest test with coverage flag does coverage too
+- npm run coverage
 after_script:
-  - 'cat coverage/lcov.info | ./node_modules/.bin/coveralls' # sends the coverage report to coveralls
+- cat coverage/lcov.info | ./node_modules/.bin/coveralls
+deploy:
+  provider: npm
+  email: kkitokkito@gmail.com
+  api_key:
+    secure: ulHhm9kFDqMSN7xQZbaOPap10ibDOZD8Y7gc+b1HL9DwO5zygsazh+1y1Pe9Hdeo1s2is+8gLQYXNYDg2RZSgfVoNCSDfFjciKttaxi0c7HATfvsh+1f3uVxNBBBTml5/cJTenDtc5M5R+GT4rbpyFdKP/beMdKEe63vdnkKyvpeKH7TTAg4L6cEUjGrwP3Z37B4ibbRk6djhUFRpEv9HeGbsZ5fch5nPEgiXLRT+v/fR2t9JE9JuTZHayf2MGqwHCU4Hu/RLtA1TbSPvBTDT80DmdfBq09sydlZb9sxHGYcdBpgSP0jAYcdTA4Jrx0xrrKnfpWk6KxWYHrEOi4l6TPSdVH5mcKcgIBVwqdpU0APhsqT8Cjg9Aqw52rvCYvkew211WVK4Q/qaTllRWg90X+unYDWIpwePDoQk4jGITem7Yv2nIWXJ9KOM4n8u3FB8SQQgfa6WAf1c3uAbdFu7xmcdN2OQN5EFKYNMAvAFmsbhIpQ+XbwcpE6gH46J3DN/DaowOqxthkfc6c5iUKAUamj3U5ywq6irVG+kQrl3vGUNPHTb5PFikdVqRnnw5mnuLf6OOlyR3bG6SJfkCORqXxaU6ES4EuM3azoM0NSYNpK+MEViOTUDSp78yynW07WmGyFlE/DJjFOEpUvt7d5nl2cp3lfsLigSqFfMqygpmA=
+  on:
+    tags: true
+    repo: kkito/transmission-rpc
+    branch: master
