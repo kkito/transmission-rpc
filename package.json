@@ -1,6 +1,6 @@
 {
   "name": "kkito-transmission-rpc",
-  "version": "0.0.16",
+  "version": "0.0.18",
   "description": "transmission-rpc",
   "license": "MIT",
   "repository": "",
@@ -22,7 +22,7 @@
     "format": "prettier --write \"{src,__tests__}/**/*.ts\" --single-quote --trailing-comma es5",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "prepare": "npm run build",
-    "beforebuild": "npm run clean && npm run format && npm run lint && echo Using TypeScript && tsc --version",
+    "prebuild": "npm run clean && npm run format && npm run lint && echo Using TypeScript && tsc --version",
     "build": "tsc --pretty",
     "test": "jest",
     "coverage": "jest --coverage",
