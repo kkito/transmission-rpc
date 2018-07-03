@@ -1,5 +1,7 @@
 
 # transmission rpc client
+[![Build Status](https://travis-ci.org/kkito/transmission-rpc.svg?branch=master)](https://travis-ci.org/kkito/transmission-rpc)
+[![npm version](https://badge.fury.io/js/kkito-transmission-rpc.svg)](https://badge.fury.io/js/kkito-transmission-rpc)
 
 transmission daemon client
 
