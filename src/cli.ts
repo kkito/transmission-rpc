@@ -33,6 +33,26 @@ async function main() {
         `id: ${x.id} \t percent: ${x.percentDone} \t name: ${x.name}`
       );
     }
+  } else if (action === 'list-finished') {
+    const result = await transmission.getTorrents();
+    // tslint:disable-next-line:no-console
+    const finished = result.filter(x => x.percentDone && x.percentDone >= 1);
+    for (const x of finished) {
+      // tslint:disable-next-line:no-console
+      console.log(
+        `id: ${x.id} \t percent: ${x.percentDone} \t name: ${x.name}`
+      );
+    }
+  } else if (action === 'list-working') {
+    const result = await transmission.getTorrents();
+    // tslint:disable-next-line:no-console
+    const working = result.filter(x => !x.percentDone || x.percentDone < 1);
+    for (const x of working) {
+      // tslint:disable-next-line:no-console
+      console.log(
+        `id: ${x.id} \t percent: ${x.percentDone} \t name: ${x.name}`
+      );
+    }
   } else if (action === 'add') {
     // 开始下载 ， 参数1 torrent 文件路径 ， 参数2 下载保存路径
     // tslint:disable-next-line:no-console
