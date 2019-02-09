@@ -33,3 +33,8 @@ console.log(result);
 ## 本地测试安装
 
 `npm install -g .`
+
+
+## 命令行使用
+
+`node-transmission list 192.168.123.36 9091`
