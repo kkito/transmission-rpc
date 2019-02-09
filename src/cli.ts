@@ -15,6 +15,9 @@ if (!port) {
   port = '9091';
 }
 
+// TODO use yargs to prepare args
+// http://yargs.js.org/
+
 const transmission = new Transmission({ host, port: parseInt(port, 10) });
 
 async function main() {
