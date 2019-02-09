@@ -1,6 +1,6 @@
 {
   "name": "kkito-transmission-rpc",
-  "version": "0.0.18",
+  "version": "0.0.20",
   "description": "transmission-rpc",
   "license": "MIT",
   "repository": "",
@@ -17,6 +17,9 @@
   ],
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "bin": {
+    "node-transmission": "./lib/cli.js"
+  },
   "scripts": {
     "clean": "rimraf lib && rimraf coverage",
     "format": "prettier --write \"{src,__tests__}/**/*.ts\" --single-quote --trailing-comma es5",
@@ -24,6 +27,7 @@
     "prepare": "npm run build",
     "prebuild": "npm run clean && npm run format && npm run lint && echo Using TypeScript && tsc --version",
     "build": "tsc --pretty",
+    "preinstall": "npm run build",
     "test": "jest",
     "coverage": "jest --coverage",
     "watch": "npm run build -- --watch",
