@@ -5,6 +5,7 @@ import { Transmission } from './transmission';
 // 有两个参数 ， host 和 port
 const action = process.argv[2];
 const param = process.argv[3];
+const param2 = process.argv[4];
 
 let host = process.env.host;
 
@@ -24,6 +25,7 @@ const transmission = new Transmission({ host, port: parseInt(port, 10) });
 
 async function main() {
   if (action === 'list') {
+    // 列出所有现有列表
     const result = await transmission.getTorrents();
     for (const x of result) {
       // tslint:disable-next-line:no-console
@@ -31,9 +33,12 @@ async function main() {
         `id: ${x.id} \t percent: ${x.percentDone} \t name: ${x.name}`
       );
     }
-  } else if (action === 'start') {
+  } else if (action === 'add') {
+    // 开始下载 ， 参数1 torrent 文件路径 ， 参数2 下载保存路径
     // tslint:disable-next-line:no-console
-    console.log('TODO');
+    const result = await transmission.startTorrent(param, param2);
+    // tslint:disable-next-line:no-console
+    console.log(`start download ${param} with id: ${result}`);
   } else {
     // tslint:disable-next-line:no-console
     console.log('usage: node-transmission list host port');
