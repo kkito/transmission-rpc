@@ -4,13 +4,15 @@ import { Transmission } from './transmission';
 
 // 有两个参数 ， host 和 port
 const action = process.argv[2];
-let host = process.argv[3];
+const param = process.argv[3];
+
+let host = process.env.host;
 
 if (!host) {
   host = 'localhost';
 }
 
-let port = process.argv[4];
+let port = process.env.port;
 if (!port) {
   port = '9091';
 }
