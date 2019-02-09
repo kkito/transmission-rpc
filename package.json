@@ -1,6 +1,6 @@
 {
   "name": "kkito-transmission-rpc",
-  "version": "0.0.20",
+  "version": "0.0.22",
   "description": "transmission-rpc",
   "license": "MIT",
   "repository": "",
@@ -27,7 +27,7 @@
     "prepare": "npm run build",
     "prebuild": "npm run clean && npm run format && npm run lint && echo Using TypeScript && tsc --version",
     "build": "tsc --pretty",
-    "preinstall": "npm run build",
+    "prepublish": "npm run build",
     "test": "jest",
     "coverage": "jest --coverage",
     "watch": "npm run build -- --watch",
