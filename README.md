@@ -29,3 +29,7 @@ const result = await t.getTorrents();
 console.log(result);
 
 ```
+
+## 本地测试安装
+
+`npm install -g .`
