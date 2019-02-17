@@ -3,6 +3,8 @@
 import { Transmission } from './transmission';
 
 // 有两个参数 ， host 和 port
+// TODO remove all nessseary log
+// TODO 通过addedDate 获取 完成比率
 const action = process.argv[2];
 const param = process.argv[3];
 const param2 = process.argv[4];
