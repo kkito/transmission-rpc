@@ -32,7 +32,9 @@ async function main() {
     for (const x of result) {
       // tslint:disable-next-line:no-console
       console.log(
-        `id: ${x.id} \t percent: ${x.percentDone} \t addDate: ${new Date(x.addedDate ? x.addedDate * 1000 : '')} \t name: ${x.name}`
+        `id: ${x.id} \t percent: ${x.percentDone} \t addDate: ${
+          x.addedDate ? new Date(x.addedDate * 1000) : ''
+        } \t name: ${x.name}`
       );
     }
   } else if (action === 'list-finished') {

@@ -55,7 +55,7 @@ export class Transmission {
       return response.headers[Transmission.SessionHeader];
     } catch (err) {
       // tslint:disable-next-line:no-console
-      console.log(err.response.headers);
+      // console.log(err.response.headers);
       this.sessionToken =
         err.response.headers[Transmission.SessionHeader.toLowerCase()];
       if (this.sessionToken) {
@@ -78,7 +78,7 @@ export class Transmission {
       headers,
     });
     // tslint:disable-next-line:no-console
-    console.log(JSON.stringify(response.data));
+    // console.log(JSON.stringify(response.data));
     return response.data;
   }
 
@@ -151,9 +151,9 @@ export class Transmission {
       return response.arguments['torrent-added'].id;
     } else {
       // tslint:disable-next-line:no-console
-      console.log(`error happened!`);
+      // console.log(`error happened!`);
       // tslint:disable-next-line:no-console
-      console.log(response);
+      // console.log(response);
       // throw new Error(`error happened for ${response}`);
       return -1;
     }
@@ -185,7 +185,7 @@ export class Transmission {
 
   public printOptions() {
     // tslint:disable-next-line:no-console
-    console.log(this.options);
+    // console.log(this.options);
   }
 
   private requestURL(): string {
