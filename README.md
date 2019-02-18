@@ -37,4 +37,6 @@ console.log(result);
 
 ## 命令行使用
 
-`node-transmission list 192.168.123.36 9091`
+`host=192.168.123.36 port=9091 node-transmission list`
+
+`host=192.168.123.36 port=9091 node-transmission add /tmp/my.torrent /mnt/sdc/path`
