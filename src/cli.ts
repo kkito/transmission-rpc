@@ -11,7 +11,8 @@ const param2 = process.argv[4];
 
 let host = process.env.host;
 
-if (!host) { host = 'localhost';
+if (!host) {
+  host = 'localhost';
 }
 
 let port = process.env.port;
@@ -23,11 +24,13 @@ if (!port) {
 // http://yargs.js.org/
 
 const transmission = new Transmission({ host, port: parseInt(port, 10) });
-function printTransmissionItem(item:ITorrentStatus) {
+function printTransmissionItem(item: ITorrentStatus) {
   const x = item;
   // tslint:disable-next-line:no-console
   console.log(
-    `id: ${x.id} \t percent: ${x.percentDone} \t addDate: ${x.addedDate } \t createdDate: ${x.dateCreated} \t name: ${x.name}`
+    `id: ${x.id} \t percent: ${x.percentDone} \t addDate: ${
+      x.addedDate
+    } \t createdDate: ${x.dateCreated} \t name: ${x.name}`
   );
 }
 
@@ -36,19 +39,19 @@ async function main() {
     // 列出所有现有列表
     const result = await transmission.getTorrents();
     for (const x of result) {
-      printTransmissionItem(x)
+      printTransmissionItem(x);
     }
   } else if (action === 'list-finished') {
     const result = await transmission.getTorrents();
     const finished = result.filter(x => x.percentDone && x.percentDone >= 1);
     for (const x of finished) {
-      printTransmissionItem(x)
+      printTransmissionItem(x);
     }
   } else if (action === 'list-working') {
     const result = await transmission.getTorrents();
     const working = result.filter(x => !x.percentDone || x.percentDone < 1);
     for (const x of working) {
-      printTransmissionItem(x)
+      printTransmissionItem(x);
     }
   } else if (action === 'add') {
     // 开始下载 ， 参数1 torrent 文件路径 ， 参数2 下载保存路径
