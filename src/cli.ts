@@ -32,13 +32,26 @@ function timestampToLocalDateStr(tz?:number):string {
   }
 }
 
+export function fmtRate (rate?:number): string {
+  if (!rate) {
+    rate = 0;
+  }
+  if (rate > 1024 * 1024) {
+    return `${Math.round(rate / 1024 / 1024 * 100) / 100}M/s`;
+  } else if (rate > 1024) {
+    return `${Math.round(rate / 1024 * 100) / 100}k/s`;
+  } else {
+    return `${rate}B/s`;
+  }
+}
+
 function printTransmissionItem(item: ITorrentStatus) {
   const x = item;
   // tslint:disable-next-line:no-console
   console.log(
     `id: ${x.id} \t percent: ${x.percentDone} \t addDate: ${
       timestampToLocalDateStr(x.addedDate)
-    } \t createdDate: ${timestampToLocalDateStr(x.dateCreated)} \t rate: ${x.rateDownload} \t name: ${x.name}`
+    } \t createdDate: ${timestampToLocalDateStr(x.dateCreated)} \t rate: ${fmtRate(x.rateDownload)} \t name: ${x.name}`
   );
 }
 
