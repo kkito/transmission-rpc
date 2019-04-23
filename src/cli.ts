@@ -28,7 +28,7 @@ function timestampToLocalDateStr(tz?:number):string {
   if (!tz) {
     return ' '
   } else {
-    return new Date(tz).toLocaleString('en-US', {timeZone: 'Asia/Shanghai'})
+    return new Date(tz * 1000).toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai'})
   }
 }
 
