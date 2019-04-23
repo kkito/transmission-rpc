@@ -2,4 +2,4 @@
 ## [0.1.0] Doing
 
 - cli output `dateCreated` `addedDate` localize, use system TZ or given by ENV
-- login #1
+- login feature [#1](/../../issues/1)
