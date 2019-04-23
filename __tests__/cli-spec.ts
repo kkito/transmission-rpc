@@ -1,4 +1,4 @@
-import { fmtRate} from '../src/cli';
+import { fmtRate, timestampToLocalDateStr } from '../src/cli';
 
 test('fmtRate valid', () => {
   let result = fmtRate(2037000)
@@ -9,3 +9,12 @@ test('fmtRate valid', () => {
   expect(result).toEqual('237B/s')
 });
 
+test('timestampToLocalDateStr', () => {
+  let result = timestampToLocalDateStr(1556016217)
+  // T_LOCALE=cn-ZH T_TZ=Asia/Shanghai
+  expect(result).toEqual('4/23/2019, 10:43:37 AM')
+  process.env.T_TZ='Asia/Shanghai'
+  process.env.T_LOCALE ='cn-ZH'
+  result = timestampToLocalDateStr(1556016217)
+  expect(result).toEqual('2019-4-23 18:43:37')
+})

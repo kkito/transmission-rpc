@@ -24,11 +24,16 @@ if (!port) {
 // http://yargs.js.org/
 
 const transmission = new Transmission({ host, port: parseInt(port, 10) });
-function timestampToLocalDateStr(tz?:number):string {
+export function timestampToLocalDateStr(tz?:number):string {
   if (!tz) {
     return ' '
   } else {
-    return new Date(tz * 1000).toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai'})
+    // return new Date(tz * 1000).toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai'})
+    // locale and timezone see doc following
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString
+    const locale = process.env.T_LOCALE || 'en-US'
+    const timezone = process.env.T_TZ || 'UTC' // 'Asia/Shanghai'
+    return new Date(tz * 1000).toLocaleString(locale, {timeZone: timezone})
   }
 }
 
