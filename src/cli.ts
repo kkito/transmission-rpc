@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { ITorrentStatus, Transmission } from './transmission';
+import { Utils } from './utils';
 
 // 有两个参数 ， host 和 port
 // TODO remove all nessseary log
@@ -24,39 +25,18 @@ if (!port) {
 // http://yargs.js.org/
 
 const transmission = new Transmission({ host, port: parseInt(port, 10) });
-export function timestampToLocalDateStr(tz?:number):string {
-  if (!tz) {
-    return ' '
-  } else {
-    // return new Date(tz * 1000).toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai'})
-    // locale and timezone see doc following
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString
-    const locale = process.env.T_LOCALE || 'en-US'
-    const timezone = process.env.T_TZ || 'UTC' // 'Asia/Shanghai'
-    return new Date(tz * 1000).toLocaleString(locale, {timeZone: timezone})
-  }
-}
-
-export function fmtRate (rate?:number): string {
-  if (!rate) {
-    rate = 0;
-  }
-  if (rate > 1024 * 1024) {
-    return `${Math.round(rate / 1024 / 1024 * 100) / 100}M/s`;
-  } else if (rate > 1024) {
-    return `${Math.round(rate / 1024 * 100) / 100}k/s`;
-  } else {
-    return `${rate}B/s`;
-  }
-}
 
 function printTransmissionItem(item: ITorrentStatus) {
   const x = item;
   // tslint:disable-next-line:no-console
   console.log(
-    `id: ${x.id} \t percent: ${x.percentDone} \t addDate: ${
-      timestampToLocalDateStr(x.addedDate)
-    } \t createdDate: ${timestampToLocalDateStr(x.dateCreated)} \t rate: ${fmtRate(x.rateDownload)} \t name: ${x.name}`
+    `id: ${x.id} \t percent: ${
+      x.percentDone
+    } \t addDate: ${Utils.timestampToLocalDateStr(
+      x.addedDate
+    )} \t createdDate: ${Utils.timestampToLocalDateStr(
+      x.dateCreated
+    )} \t rate: ${Utils.fmtRate(x.rateDownload)} \t name: ${x.name}`
   );
 }
 
