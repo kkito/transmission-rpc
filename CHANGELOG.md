@@ -1,3 +1,5 @@
 
-## [1.0.0] Doing
-- cli support, list , add torrent , remove 
+## [0.1.0] Doing
+
+- cli output `dateCreated` `addedDate` localize, use system TZ or given by ENV
+- login #1
