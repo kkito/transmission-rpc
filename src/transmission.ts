@@ -20,6 +20,8 @@ export interface ITorrentStatus {
   dateCreated?: number;
   downloadDir?: string;
   addedDate?: number;
+  rateDownload?: number;
+  rateUpload?: number;
 }
 
 export class Transmission {
@@ -93,6 +95,8 @@ export class Transmission {
         'dateCreated',
         'downloadDir',
         'addedDate',
+        'rateDownload',
+        'rateUpload',
       ],
     });
     return result.arguments.torrents;
@@ -107,6 +111,8 @@ export class Transmission {
         'dateCreated',
         'downloadDir',
         'addedDate',
+        'rateDownload',
+        'rateUpload',
       ],
       ids: [torrentId],
     });

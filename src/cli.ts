@@ -24,13 +24,21 @@ if (!port) {
 // http://yargs.js.org/
 
 const transmission = new Transmission({ host, port: parseInt(port, 10) });
+function timestampToLocalDateStr(tz?:number):string {
+  if (!tz) {
+    return ' '
+  } else {
+    return new Date(tz).toLocaleString('en-US', {timeZone: 'Asia/Shanghai'})
+  }
+}
+
 function printTransmissionItem(item: ITorrentStatus) {
   const x = item;
   // tslint:disable-next-line:no-console
   console.log(
     `id: ${x.id} \t percent: ${x.percentDone} \t addDate: ${
-      x.addedDate
-    } \t createdDate: ${x.dateCreated} \t name: ${x.name}`
+      timestampToLocalDateStr(x.addedDate)
+    } \t createdDate: ${timestampToLocalDateStr(x.dateCreated)} \t rate: ${x.rateDownload} \t name: ${x.name}`
   );
 }
 
