@@ -30,13 +30,17 @@ console.log(result);
 
 ```
 
-## 本地测试安装
+## install 
 
-`npm install -g .`
+`npm install -g kkito-transmission-rpc`
+
+or install local `npm install -g .`
 
 
-## 命令行使用
+## use in cli
 
 `host=192.168.123.36 port=9091 node-transmission list`
+
+`host=192.168.123.36 port=9091 node-transmission list-working`
 
 `host=192.168.123.36 port=9091 node-transmission add /tmp/my.torrent /mnt/sdc/path`
