@@ -149,10 +149,17 @@ export class Transmission {
           hashString: string;
           id: number;
         };
+        'torrent-duplicate': {
+          hashString: string;
+          id: number;
+        }
       };
     }>('torrent-add', args);
     // tslint:disable-next-line:no-string-literal
     if (response.result && response.result === 'success') {
+      if (response.arguments['torrent-duplicate']) {
+        return response.arguments['torrent-duplicate'].id
+      }
       // tslint:disable-next-line:no-string-literal
       return response.arguments['torrent-added'].id;
     } else {
