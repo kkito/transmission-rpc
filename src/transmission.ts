@@ -22,6 +22,11 @@ export interface ITorrentStatus {
   addedDate?: number;
   rateDownload?: number;
   rateUpload?: number;
+  uploadRatio?: number;
+  // files?: Array<{ name: string; length: number; bytesCompleted: number }>;
+  files?: any[];
+  hashString?: string;
+  activityDate?: number;
 }
 
 export class Transmission {
@@ -95,6 +100,10 @@ export class Transmission {
         'addedDate',
         'rateDownload',
         'rateUpload',
+        'uploadRatio',
+        'files',
+        'hashString',
+        'activityDate',
       ],
       ...params
     });
