@@ -1,5 +1,10 @@
 import { ITorrentStatus } from "./transmission";
 
+/**
+ * all api just return json , but if deeply use the status data
+ * init this class from return result
+ * it supplies much more functions
+ */
 export class TorrentStatus implements ITorrentStatus {
   public id?: number;
   public name?: string;

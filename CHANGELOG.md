@@ -6,4 +6,6 @@
 
 ## [0.1.0]
 
+- add class TorrentStatus make it easy to use for usage
+- refact rpcCall with params
 - fix getTorrentById return 
