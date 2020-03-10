@@ -84,25 +84,7 @@ export class Transmission {
     return response.data;
   }
 
-  public async getTorrents(): Promise<ITorrentStatus[]> {
-    const result = await this.rpcCall<{
-      arguments: { torrents: ITorrentStatus[] };
-    }>('torrent-get', {
-      fields: [
-        'id',
-        'name',
-        'percentDone',
-        'dateCreated',
-        'downloadDir',
-        'addedDate',
-        'rateDownload',
-        'rateUpload',
-      ],
-    });
-    return result.arguments.torrents;
-  }
-
-  public async getTorrentInfo(torrentId: number): Promise<any> {
+  public async rpcGetTorrents(params:any = {}): Promise<{arguments: {torrents: ITorrentStatus[]}}> {
     return this.rpcCall('torrent-get', {
       fields: [
         'id',
@@ -114,8 +96,28 @@ export class Transmission {
         'rateDownload',
         'rateUpload',
       ],
-      ids: [torrentId],
+      ...params
     });
+
+  }
+
+  public async getTorrents(): Promise<ITorrentStatus[]> {
+    const result = await this.rpcGetTorrents()
+    return result.arguments.torrents;
+  }
+
+  public async getTorrentInfo(torrentId: number): Promise<{arguments: {torrents: ITorrentStatus[]}}> {
+    return this.rpcGetTorrents({ids: torrentId})
+  }
+
+  public async getTorrentById(torrentId: number): Promise<ITorrentStatus|null> {
+    const result = await this.rpcGetTorrents({ids: torrentId})
+    if (result.arguments && result.arguments.torrents) {
+      if (result.arguments.torrents.length > 0) {
+        return result.arguments.torrents[0]
+      }
+    }
+    return null
   }
 
   // 返回值 { arguments: { 'torrent-added': { hashString: '56889108e64f2ff82882bb4b6aec3fe47f2b34fd', id: 6, name: '524' } }, result: 'success' }
