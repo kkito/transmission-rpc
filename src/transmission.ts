@@ -27,6 +27,9 @@ export interface ITorrentStatus {
   files?: any[];
   hashString?: string;
   activityDate?: number;
+  totalSize?: number;
+  downloadedEver?: number;
+  uploadedEver?: number;
 }
 
 export class Transmission {
@@ -90,6 +93,7 @@ export class Transmission {
   }
 
   public async rpcGetTorrents(params:any = {}): Promise<{arguments: {torrents: ITorrentStatus[]}}> {
+    // see https://pythonhosted.org/transmissionrpc/reference/transmissionrpc.html
     return this.rpcCall('torrent-get', {
       fields: [
         'id',
@@ -100,8 +104,11 @@ export class Transmission {
         'addedDate',
         'rateDownload',
         'rateUpload',
-        'uploadRatio',
+        'uploadRatio', // uploadedEver / downloadedEver
         'files',
+        'totalSize',
+        'downloadedEver',
+        'uploadedEver',
         'hashString',
         'activityDate',
       ],

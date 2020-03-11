@@ -18,10 +18,14 @@ export class TorrentStatus implements ITorrentStatus {
   public files?: any[];
   public hashString?: string;
   public activityDate?: number;
+  public totalSize?: number;
+  public downloadedEver?: number;
+  public uploadedEver?: number;
 
   constructor(parms:ITorrentStatus) {
     this.id = parms.id
     this.name = parms.name
+    this.addedDate = parms.addedDate
     this.percentDone = parms.percentDone
     this.dateCreated = parms.dateCreated
     this.downloadDir = parms.downloadDir
@@ -31,6 +35,9 @@ export class TorrentStatus implements ITorrentStatus {
     this.files = parms.files
     this.hashString = parms.hashString
     this.activityDate = parms.activityDate
+    this.totalSize = parms.totalSize
+    this.downloadedEver = parms.downloadedEver
+    this.uploadedEver = parms.uploadedEver
   }
 
   public isCompleted():boolean {
@@ -42,7 +49,7 @@ export class TorrentStatus implements ITorrentStatus {
    * return -1 if any invalid situation
    */
   public lastInMinutes() :number {
-    return -1
+    return this._calLastMinutes(this.addedDate)
   }
 
   /**
@@ -52,6 +59,18 @@ export class TorrentStatus implements ITorrentStatus {
    * return -1  if invalid
    */
   public lastDeactiveInMinutes() :number {
-    return -1
+    return this._calLastMinutes(this.activityDate)
+  }
+
+  public lastFromOriginCreate() :number {
+    return this._calLastMinutes(this.dateCreated)
+  }
+
+  protected _calLastMinutes(startTSSeconds?:number):number {
+    if (!startTSSeconds) {
+      return -1
+    } else {
+      return Math.round((new Date().getTime()/1000 - startTSSeconds) / 60)
+    }
   }
 }
