@@ -20,3 +20,17 @@ test('init', () => {
   // tslint:disable-next-line:no-console
   // console.log(status.lastFromOriginCreate())
 })
+
+
+test('showTimeLast', () => {
+  let result = TorrentStatus.showTimeLast(6)
+  expect(result).toEqual('6 mins')
+  result = TorrentStatus.showTimeLast(69)
+  expect(result).toEqual('1.1 hours')
+  result = TorrentStatus.showTimeLast(1201)
+  expect(result).toEqual('20.0 hours')
+  result = TorrentStatus.showTimeLast(1501)
+  expect(result).toEqual('1.0 days')
+  result = TorrentStatus.showTimeLast(6900)
+  expect(result).toEqual('4.8 days')
+})

@@ -6,6 +6,17 @@ import { ITorrentStatus } from "./transmission";
  * it supplies much more functions
  */
 export class TorrentStatus implements ITorrentStatus {
+
+  public static showTimeLast(minutes:number) : string {
+    if (minutes <= 60 ) {
+      return `${minutes} mins`
+    } else if (minutes <= 24 * 60) {
+      return `${(minutes / 60).toFixed(1)} hours`
+    } else {
+      return `${(minutes / 60 / 24).toFixed(1)} days`;
+    }
+  }
+
   public id?: number;
   public name?: string;
   public percentDone?: number;
