@@ -15,6 +15,7 @@ the rpc client by using node
 
 ```ts
 import { Transmission } from './src/transmission'
+// port and auth are optional
 const t = new Transmission({ host: '192.168.x.x' });
 // const token = await t.getToken();
 const result = await t.getTorrents();
@@ -35,6 +36,10 @@ console.log(result);
 `npm install -g kkito-transmission-rpc`
 
 or install local `npm install -g .`
+
+## test env
+
+use (https://hub.docker.com/r/linuxserver/transmission/)[https://hub.docker.com/r/linuxserver/transmission/] for test env
 
 
 ## use in cli

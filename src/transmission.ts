@@ -2,6 +2,10 @@ import axios from 'axios';
 import * as fs from 'fs';
 
 export interface ITransmissionOptions {
+  auth?: {
+    username: string;
+    password: string;
+  }
   host?: string;
   port?: number;
   path?: string;
@@ -53,6 +57,9 @@ export class Transmission {
       if (options.path) {
         this.options.path = options.path;
       }
+      if (options.auth) {
+        this.options.auth = options.auth;
+      }
     }
   }
 
@@ -61,7 +68,8 @@ export class Transmission {
       return this.sessionToken;
     }
     try {
-      const response = await axios.get(this.requestURL());
+      const headers = this.prepareHeadhers({})
+      const response = await axios.get(this.requestURL() , {headers});
       return response.headers[Transmission.SessionHeader];
     } catch (err) {
       // tslint:disable-next-line:no-console
@@ -84,6 +92,7 @@ export class Transmission {
     const token = await this.getToken();
     const headers: any = {};
     headers[Transmission.SessionHeader] = token;
+    this.prepareHeadhers(headers)
     const response = await axios.post<T>(this.requestURL(), data, {
       headers,
     });
@@ -217,6 +226,13 @@ export class Transmission {
   public printOptions() {
     // tslint:disable-next-line:no-console
     // console.log(this.options);
+  }
+
+  protected prepareHeadhers(headers:any) : any {
+    if (this.options.auth) {
+      headers.Authorization = `Basic ${Buffer.from(`${this.options.auth.username}:${this.options.auth.password}`).toString('base64')}`
+    }
+    return headers
   }
 
   private requestURL(): string {
